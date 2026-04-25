@@ -236,7 +236,8 @@ async function fetchJudgeVerdict(question, aiResponses) {
       body: JSON.stringify({
         contents: [{
           parts: [{ text: prompt }]
-        }]
+        }],
+        tools: [{ googleSearch: {} }]
       })
     });
     
