@@ -1,197 +1,212 @@
 .hero {
   text-align: center;
-  padding: 4rem 0 2rem;
+  padding: 6rem 0 4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .title {
-  font-size: 3.5rem;
+  font-size: 4rem;
   font-weight: 800;
   line-height: 1.1;
+  letter-spacing: -0.02em;
   margin-bottom: 0.5rem;
 }
 
 .subtitle {
   font-size: 1.25rem;
   color: var(--text-muted);
-  max-width: 600px;
+  max-width: 650px;
+  line-height: 1.6;
 }
 
 .search-section {
   width: 100%;
   max-width: 800px;
-  margin: 0 auto 4rem;
+  margin: 0 auto 5rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .search-box {
   width: 100%;
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .search-input {
   width: 100%;
-  padding: 1.5rem 2rem;
+  padding: 1.5rem 12rem 1.5rem 2rem;
   font-size: 1.25rem;
-  background: var(--glass-bg);
-  border: 2px solid var(--glass-border);
+  background: var(--bg-color-secondary);
+  border: 1px solid var(--glass-border);
   border-radius: 100px;
   color: var(--text-color);
   font-family: inherit;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .search-input:focus {
   border-color: var(--accent-color);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .search-button {
   position: absolute;
   right: 10px;
-  top: 10px;
-  bottom: 10px;
-  padding: 0 2rem;
+  height: calc(100% - 20px);
+  padding: 0 2.5rem;
   border-radius: 100px;
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+  background: var(--text-color);
+  color: var(--bg-color);
   border: none;
-  color: white;
   font-weight: 600;
   font-size: 1.1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .search-button:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 15px var(--accent-secondary);
+  background: white;
 }
 
 .search-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
 }
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-bottom: 4rem;
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 5rem;
 }
 
 .ai-card {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  animation: slideUp 0.5s ease forwards;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .ai-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-bottom: 1px solid var(--glass-border);
-  padding-bottom: 1rem;
 }
 
 .ai-name {
   font-weight: 600;
   font-size: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
 .ai-response {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  opacity: 0.9;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--text-muted);
 }
 
 .judge-section {
   margin-top: 2rem;
-  padding: 3rem;
-  border-color: rgba(236, 72, 153, 0.3);
+  padding: 4rem;
+  border-color: rgba(16, 185, 129, 0.3);
   position: relative;
   overflow: hidden;
-  animation: slideUp 0.6s ease forwards;
-  box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15);
+  box-shadow: 0 10px 40px rgba(16, 185, 129, 0.1);
 }
 
 .judge-section::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; height: 4px;
-  background: linear-gradient(90deg, var(--accent-color), var(--accent-tertiary));
+  background: linear-gradient(90deg, var(--accent-tertiary), var(--accent-color));
 }
 
 .judge-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 800;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
+  letter-spacing: -0.02em;
 }
 
 .judge-response {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   line-height: 1.8;
+  color: #e2e8f0;
 }
 
 /* Markdown Styles */
 .markdown {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.5rem;
 }
 
 .markdown strong {
-  color: var(--accent-tertiary);
-  font-weight: 800;
-  letter-spacing: 0.5px;
+  color: white;
+  font-weight: 700;
 }
 
 .markdown p {
+  margin-bottom: 0;
+}
+
+.markdown ul {
+  padding-left: 1.5rem;
+  margin: 0;
+}
+
+.markdown li {
   margin-bottom: 0.5rem;
-  background: rgba(0, 0, 0, 0.2);
-  padding: 1.5rem;
-  border-radius: 12px;
-  border-left: 4px solid var(--accent-secondary);
 }
 
 /* Loading animations */
 .skeleton {
-  background: linear-gradient(90deg, var(--glass-bg) 25%, var(--glass-bg-hover) 50%, var(--glass-bg) 75%);
+  background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
   background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  border-radius: 4px;
+  animation: loading 1.5s infinite linear;
+  border-radius: 6px;
 }
 
 .skeleton-text {
   height: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
   width: 100%;
 }
 .skeleton-text:last-child {
   width: 80%;
+  margin-bottom: 0;
 }
 
 @keyframes loading {
@@ -201,13 +216,13 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: 2rem 0 1rem;
+    padding: 4rem 0 2rem;
   }
   .title {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
   }
   .subtitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
     padding: 0 1rem;
   }
   .search-input {
@@ -219,8 +234,9 @@
     width: 100%;
     padding: 1.2rem;
     margin-top: 1rem;
-    border-radius: 100px;
+    border-radius: 16px;
     font-size: 1.2rem;
+    justify-content: center;
   }
   .search-box {
     display: flex;
@@ -228,16 +244,13 @@
   }
   .results-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
   }
   .judge-section {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
   }
   .judge-title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     flex-wrap: wrap;
   }
-  .ai-card {
-    padding: 1.5rem;
-  }
 }
+

@@ -1,18 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-
 :root {
-  --bg-color: #0a0c10;
-  --text-color: #e2e8f0;
+  --bg-color: #050505;
+  --bg-color-secondary: #0a0a0a;
+  --text-color: #f1f5f9;
   --text-muted: #94a3b8;
-  --accent-color: #6366f1; /* Indigo */
-  --accent-secondary: #a855f7; /* Purple */
-  --accent-tertiary: #ec4899; /* Pink */
+  --accent-color: #3b82f6; /* Blue */
+  --accent-secondary: #8b5cf6; /* Violet */
+  --accent-tertiary: #10b981; /* Emerald */
   
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-bg-hover: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-  --card-radius: 20px;
+  --glass-bg: rgba(25, 25, 25, 0.4);
+  --glass-bg-hover: rgba(35, 35, 35, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --card-radius: 16px;
 }
 
 body {
@@ -20,16 +19,17 @@ body {
   padding: 0;
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-image: 
-    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.1), transparent 30%),
-    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.1), transparent 30%),
-    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.05), transparent 40%);
+    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%),
+    radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.05), transparent 30%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -48,21 +48,23 @@ a {
 /* Utility Classes */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: var(--card-radius);
   box-shadow: var(--glass-shadow);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .glass-panel:hover {
   background: var(--glass-bg-hover);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.6);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary), var(--accent-tertiary));
+  background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -75,3 +77,4 @@ a {
   margin: 0 auto;
   padding: 2rem;
 }
+

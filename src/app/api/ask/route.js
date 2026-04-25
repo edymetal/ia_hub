@@ -12,25 +12,36 @@ export async function POST(request) {
       return Response.json({ error: "Pergunta não fornecida" }, { status: 400 });
     }
 
+    // Função auxiliar para medir tempo
+    const timedFetch = async (fetchFn, ...args) => {
+      const start = Date.now();
+      try {
+        const response = await fetchFn(...args);
+        return { response, time: Date.now() - start };
+      } catch (error) {
+        return { error: error.message, time: Date.now() - start };
+      }
+    };
+
     // Preparando as 5 promessas
     const promises = [
-      fetchGemini(question),
-      fetchGroq(question),
-      fetchCohere(question),
-      fetchMistral(question),
-      fetchOpenRouter(question),
+      timedFetch(fetchGemini, question),
+      timedFetch(fetchGroq, question),
+      timedFetch(fetchCohere, question),
+      timedFetch(fetchMistral, question),
+      timedFetch(fetchOpenRouter, question),
     ];
 
     // Aguarda todas as 5 respostas
-    const results = await Promise.allSettled(promises);
+    const results = await Promise.all(promises);
     
     // Mapeando as respostas para o formato do frontend
     const aiResponses = [
-      { id: "gemini", name: "Gemini 2.5 Flash", response: extractResult(results[0], "Erro ao consultar Gemini") },
-      { id: "groq", name: "Groq (Llama 3)", response: extractResult(results[1], "Erro ao consultar Groq") },
-      { id: "cohere", name: "Cohere", response: extractResult(results[2], "Erro ao consultar Cohere") },
-      { id: "mistral", name: "Mistral", response: extractResult(results[3], "Erro ao consultar Mistral") },
-      { id: "openrouter", name: "OpenRouter (Qwen)", response: extractResult(results[4], "Erro ao consultar OpenRouter") },
+      { id: "gemini", name: "Gemini 2.5 Flash", response: results[0].response || `⚠️ Falha: ${results[0].error}`, time: results[0].time },
+      { id: "groq", name: "Groq (Llama 3)", response: results[1].response || `⚠️ Falha: ${results[1].error}`, time: results[1].time },
+      { id: "cohere", name: "Cohere", response: results[2].response || `⚠️ Falha: ${results[2].error}`, time: results[2].time },
+      { id: "mistral", name: "Mistral", response: results[3].response || `⚠️ Falha: ${results[3].error}`, time: results[3].time },
+      { id: "openrouter", name: "OpenRouter (Qwen)", response: results[4].response || `⚠️ Falha: ${results[4].error}`, time: results[4].time },
     ];
 
     // Agora, o Juiz (Gemini 2.5 Pro ou Flash) analisa as respostas
@@ -44,15 +55,6 @@ export async function POST(request) {
   } catch (error) {
     console.error("Erro geral na API:", error);
     return Response.json({ error: "Erro interno do servidor" }, { status: 500 });
-  }
-}
-
-function extractResult(promiseResult, errorMessage) {
-  if (promiseResult.status === "fulfilled") {
-    return promiseResult.value;
-  } else {
-    // Retorna a mensagem de erro específica para a interface
-    return `⚠️ Falha: ${promiseResult.reason.message || errorMessage}`;
   }
 }
 
@@ -91,7 +93,8 @@ async function fetchGemini(question) {
       body: JSON.stringify({
         contents: [{
           parts: [{ text: `${SYSTEM_PROMPT}\n\nPergunta: ${question}` }]
-        }]
+        }],
+        tools: [{ googleSearch: {} }]
       })
     });
     
@@ -131,7 +134,7 @@ async function fetchGroq(question) {
 async function fetchCohere(question) {
   if (!process.env.COHERE_API_KEY) throw new Error("COHERE_API_KEY ausente no .env.local");
   
-  // Usando a nova API v2 do Cohere
+  // Usando a nova API v2 do Cohere (conector removido pois a API descontinuou esse parâmetro)
   const res = await fetch("https://api.cohere.com/v2/chat", {
     method: "POST",
     headers: {
@@ -217,8 +220,11 @@ async function fetchJudgeVerdict(question, aiResponses) {
   Se TODAS as respostas apresentarem falha, responda apenas: "Veredito indisponível. Todas as IAs excederam suas cotas ou falharam."
   
   Apresente o resultado OBRIGATORIAMENTE no seguinte formato Markdown:
-  **⚖️ Veredito Oficial:** [Sintetize a verdade direta em 1 frase]
-  **🔍 Análise da Corte:** [Explique brevemente, em 1 ou 2 frases, se houve divergência ou qual IA foi mais precisa]
+  **⚖️ Veredito Oficial (por Gemini 2.5 Flash):** [Sintetize a verdade direta em 1 frase]
+  
+  **🤖 Avaliação Individual:**
+  Para cada modelo que respondeu, indique:
+  - **[Nome da IA]:** ✅ Correto / ❌ Incorreto / ⚠️ Parcialmente Correto - [Breve justificativa, máximo de 1 frase]
   
   REGRA DE OURO: Responda obrigatoriamente no MESMO IDIOMA da Pergunta Original. Se a pergunta for em Inglês, responda em Inglês.
   `;
@@ -260,7 +266,7 @@ async function fetchBackupJudgeVerdict(prompt) {
       body: JSON.stringify({
         model: "llama-3.3-70b-versatile",
         messages: [
-          { role: "system", content: "Você é o Juiz Reserva. Use o formato:\n**⚖️ Veredito Oficial:** [resposta curta]\n**🔍 Análise da Corte:** [análise curta]. Responda no mesmo idioma da pergunta contida no prompt." },
+          { role: "system", content: "Você é o Juiz Reserva. Use o formato:\n**⚖️ Veredito Oficial (por Llama 3 Reserva):** [resposta curta]\n**🔍 Análise da Corte:** [análise curta]. Responda no mesmo idioma da pergunta contida no prompt." },
           { role: "user", content: prompt }
         ]
       })
